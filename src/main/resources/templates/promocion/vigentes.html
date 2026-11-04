@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<!-- HU-010: el cliente consulta las promociones vigentes -->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{plantilla/fragmentos :: head}"></head>
+    <body class="bg-light">
+        <header th:replace="~{plantilla/fragmentos :: encabezado}"></header>
+
+        <section class="bg-danger-subtle py-5 text-center">
+            <div class="container">
+                <h1 class="fw-bold text-danger-emphasis"><i class="fa-solid fa-tags"></i> [[#{promocion.titulo.cliente}]]</h1>
+                <p class="lead text-danger-emphasis mb-0">[[#{promocion.subtitulo.cliente}]]</p>
+            </div>
+        </section>
+
+        <section class="container py-5">
+            <div class="text-center text-muted py-5" th:if="${promociones.empty}">
+                <i class="fa-solid fa-face-smile fs-1 mb-3"></i>
+                <p>[[#{promocion.sinVigentes}]]</p>
+            </div>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                <div class="col" th:each="p : ${promociones}">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <span class="badge text-bg-danger fs-5 mb-3">-[[${p.porcentajeDescuento}]]%</span>
+                            <h4 class="card-title fw-bold text-danger-emphasis">[[${p.titulo}]]</h4>
+                            <p class="card-text">[[${p.descripcion}]]</p>
+                        </div>
+                        <div class="card-footer bg-white border-0 px-4 pb-4 small text-muted">
+                            <i class="fa-regular fa-calendar"></i>
+                            [[#{promocion.validaHasta}]] [[${#temporals.format(p.fechaFin, 'dd/MM/yyyy')}]]
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer th:replace="~{plantilla/fragmentos :: pie}"></footer>
+    </body>
+</html>

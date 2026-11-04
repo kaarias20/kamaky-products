@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<!-- Listado de solicitudes personalizadas para el administrador -->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{plantilla/fragmentos :: head}"></head>
+    <body class="bg-light">
+        <header th:replace="~{plantilla/fragmentos :: encabezado}"></header>
+
+        <section class="container py-4">
+            <h2 class="fw-bold text-danger-emphasis mb-4"><i class="fa-solid fa-clipboard-list"></i> [[#{solicitud.titulo.admin}]]</h2>
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-0">
+                    <div class="table-responsive" th:unless="${solicitudes.empty}">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-danger">
+                                <tr>
+                                    <th class="ps-3">[[#{solicitud.fechaSolicitud}]]</th>
+                                    <th>[[#{solicitud.seccion.cliente}]]</th>
+                                    <th>[[#{solicitud.descripcion}]]</th>
+                                    <th class="text-center">[[#{solicitud.cantidad}]]</th>
+                                    <th>[[#{solicitud.entrega}]]</th>
+                                    <th class="pe-3">[[#{solicitud.estado}]]</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="s : ${solicitudes}">
+                                    <td class="ps-3 small">[[${#temporals.format(s.fechaSolicitud, 'dd/MM/yyyy HH:mm')}]]</td>
+                                    <td>
+                                        <strong>[[${s.cliente.nombre}]]</strong><br/>
+                                        <small class="text-muted">[[${s.cliente.telefono}]] · [[${s.cliente.correo}]]</small>
+                                    </td>
+                                    <td class="small">
+                                        [[${s.descripcion}]]
+                                        <div th:if="${s.preferencias != null and !#strings.isEmpty(s.preferencias)}" class="text-muted fst-italic">[[${s.preferencias}]]</div>
+                                    </td>
+                                    <td class="text-center">[[${s.cantidad}]]</td>
+                                    <td class="small">[[${#temporals.format(s.fechaEntrega, 'dd/MM/yyyy')}]] [[${#temporals.format(s.horaEntrega, 'HH:mm')}]]</td>
+                                    <td class="pe-3"><span class="badge text-bg-warning">[[${s.estado}]]</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="text-center text-muted py-5 mb-0" th:if="${solicitudes.empty}">[[#{lista.vacia}]]</p>
+                </div>
+            </div>
+        </section>
+
+        <footer th:replace="~{plantilla/fragmentos :: pie}"></footer>
+    </body>
+</html>
