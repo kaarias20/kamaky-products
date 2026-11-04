@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<!-- HU-016: administración de promociones -->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{plantilla/fragmentos :: head}"></head>
+    <body class="bg-light">
+        <header th:replace="~{plantilla/fragmentos :: encabezado}"></header>
+        <section th:replace="~{plantilla/fragmentos :: mensajes}"></section>
+
+        <section th:replace="~{promocion/fragmentos :: barraSuperior}"></section>
+        <section th:replace="~{promocion/fragmentos :: tabla}"></section>
+        <section th:replace="~{promocion/fragmentos :: formulario}"></section>
+        <section th:replace="~{plantilla/fragmentos :: modalEliminar(@{/promocion/eliminar}, 'idPromocion')}"></section>
+
+        <footer th:replace="~{plantilla/fragmentos :: pie}"></footer>
+        <script th:src="@{/js/modulos/promocion.js}"></script>
+    </body>
+</html>

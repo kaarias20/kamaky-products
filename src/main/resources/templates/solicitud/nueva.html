@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<!-- HU-009: formulario de solicitud de producto personalizado -->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{plantilla/fragmentos :: head}"></head>
+    <body class="bg-light">
+        <header th:replace="~{plantilla/fragmentos :: encabezado}"></header>
+        <section th:replace="~{plantilla/fragmentos :: mensajes}"></section>
+
+        <section class="bg-danger-subtle py-5 text-center">
+            <div class="container">
+                <h1 class="fw-bold text-danger-emphasis"><i class="fa-solid fa-wand-magic-sparkles"></i> [[#{solicitud.titulo}]]</h1>
+                <p class="lead text-danger-emphasis mb-0">[[#{solicitud.subtitulo}]]</p>
+            </div>
+        </section>
+
+        <section class="container py-5">
+            <div class="card border-0 shadow-sm mx-auto" style="max-width: 860px;">
+                <form method="post" th:action="@{/solicitud/guardar}" class="card-body p-4">
+                    <h5 class="text-danger-emphasis mb-3"><i class="fa-solid fa-user"></i> [[#{solicitud.seccion.cliente}]]</h5>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-5">
+                            <label for="clienteNombre" class="form-label">[[#{cliente.nombre}]]</label>
+                            <input type="text" id="clienteNombre" name="cliente.nombre" class="form-control" maxlength="80" required/>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="clienteTelefono" class="form-label">[[#{cliente.telefono}]]</label>
+                            <input type="tel" id="clienteTelefono" name="cliente.telefono" class="form-control" maxlength="20" required/>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="clienteCorreo" class="form-label">[[#{cliente.correo}]]</label>
+                            <input type="email" id="clienteCorreo" name="cliente.correo" class="form-control" maxlength="100" required/>
+                        </div>
+                    </div>
+
+                    <h5 class="text-danger-emphasis mb-3"><i class="fa-solid fa-cake-candles"></i> [[#{solicitud.seccion.pedido}]]</h5>
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label for="solicitudDescripcion" class="form-label">[[#{solicitud.descripcion}]]</label>
+                            <textarea id="solicitudDescripcion" name="descripcion" class="form-control" rows="4" maxlength="500" required></textarea>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="solicitudCantidad" class="form-label">[[#{solicitud.cantidad}]]</label>
+                            <input type="number" id="solicitudCantidad" name="cantidad" class="form-control" min="1" value="1" required/>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="solicitudFecha" class="form-label">[[#{solicitud.fechaEntrega}]]</label>
+                            <input type="date" id="solicitudFecha" name="fechaEntrega" class="form-control" required/>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="solicitudHora" class="form-label">[[#{solicitud.horaEntrega}]]</label>
+                            <input type="time" id="solicitudHora" name="horaEntrega" class="form-control" required/>
+                        </div>
+                        <div class="col-12">
+                            <label for="solicitudPreferencias" class="form-label">[[#{solicitud.preferencias}]]</label>
+                            <input type="text" id="solicitudPreferencias" name="preferencias" class="form-control" maxlength="255"/>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <a class="btn btn-secondary" th:href="@{/}">[[#{accion.regresar}]]</a>
+                        <button type="submit" class="btn btn-danger px-4"><i class="fa-solid fa-paper-plane"></i> [[#{solicitud.enviar}]]</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <footer th:replace="~{plantilla/fragmentos :: pie}"></footer>
+    </body>
+</html>

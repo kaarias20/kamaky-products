@@ -1,0 +1,119 @@
+<!-- Fragmento #1: encabezado del módulo con el botón para agregar -->
+<section th:fragment="barraSuperior" class="container pt-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <div>
+            <h2 class="fw-bold text-danger-emphasis mb-0"><i class="fa-solid fa-tags"></i> [[#{promocion.titulo.admin}]]</h2>
+            <small class="text-muted">[[#{promocion.total}]]: [[${totalPromociones}]]</small>
+        </div>
+        <button type="button" class="btn btn-danger rounded-pill px-4"
+                data-bs-toggle="modal" data-bs-target="#modalPromocion"
+                data-modo="nueva" th:data-titulo="#{promocion.nueva}">
+            <i class="fa-solid fa-plus"></i> [[#{promocion.nueva}]]
+        </button>
+    </div>
+</section>
+
+<!-- Fragmento #2: tabla con todas las promociones (HU-016) -->
+<section th:fragment="tabla" class="container py-4">
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive" th:unless="${promociones.empty}">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-danger">
+                        <tr>
+                            <th class="ps-3">[[#{promocion.titulo}]]</th>
+                            <th>[[#{promocion.descripcion}]]</th>
+                            <th class="text-center">[[#{promocion.descuento}]]</th>
+                            <th>[[#{promocion.fechaInicio}]]</th>
+                            <th>[[#{promocion.fechaFin}]]</th>
+                            <th class="text-center">[[#{promocion.activa}]]</th>
+                            <th class="text-center pe-3">[[#{promocion.acciones}]]</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="p : ${promociones}">
+                            <td class="ps-3 fw-semibold">[[${p.titulo}]]</td>
+                            <td class="small">[[${p.descripcion}]]</td>
+                            <td class="text-center"><span class="badge text-bg-danger">-[[${p.porcentajeDescuento}]]%</span></td>
+                            <td>[[${#temporals.format(p.fechaInicio, 'dd/MM/yyyy')}]]</td>
+                            <td>[[${#temporals.format(p.fechaFin, 'dd/MM/yyyy')}]]</td>
+                            <td class="text-center">
+                                <span th:if="${p.activa}" class="badge rounded-pill text-bg-success">[[#{promocion.si}]]</span>
+                                <span th:unless="${p.activa}" class="badge rounded-pill text-bg-secondary">[[#{promocion.no}]]</span>
+                            </td>
+                            <td class="text-center pe-3 text-nowrap">
+                                <button type="button" class="btn btn-sm btn-outline-secondary"
+                                        data-bs-toggle="modal" data-bs-target="#modalPromocion"
+                                        data-modo="editar" th:data-titulo="#{promocion.editar}"
+                                        th:data-id="${p.idPromocion}"
+                                        th:data-titulo-promocion="${p.titulo}"
+                                        th:data-descripcion="${p.descripcion}"
+                                        th:data-descuento="${p.porcentajeDescuento}"
+                                        th:data-inicio="${p.fechaInicio}"
+                                        th:data-fin="${p.fechaFin}"
+                                        th:data-activa="${p.activa}">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-danger"
+                                        data-bs-toggle="modal" data-bs-target="#modalEliminar"
+                                        th:data-id="${p.idPromocion}" th:data-descripcion="${p.titulo}">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="text-center text-muted py-5 mb-0" th:if="${promociones.empty}">[[#{lista.vacia}]]</p>
+        </div>
+    </div>
+</section>
+
+<!-- Fragmento #3: modal con el formulario para crear o modificar una promoción -->
+<section th:fragment="formulario">
+    <div class="modal fade" id="modalPromocion" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0">
+                <form id="formPromocion" method="post" th:action="@{/promocion/guardar}">
+                    <div class="modal-header bg-danger-subtle text-danger-emphasis" id="encabezadoPromocion">
+                        <h5 class="modal-title"><i class="fa-solid fa-tags"></i> <span id="tituloModalPromocion"></span></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="promocionId" name="idPromocion"/>
+                        <div class="row g-3">
+                            <div class="col-md-8">
+                                <label for="promocionTitulo" class="form-label">[[#{promocion.titulo}]]</label>
+                                <input type="text" id="promocionTitulo" name="titulo" class="form-control" maxlength="60" required/>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="promocionDescuento" class="form-label">[[#{promocion.descuento}]] (%)</label>
+                                <input type="number" id="promocionDescuento" name="porcentajeDescuento" class="form-control" min="1" max="100" required/>
+                            </div>
+                            <div class="col-12">
+                                <label for="promocionDescripcion" class="form-label">[[#{promocion.descripcion}]]</label>
+                                <textarea id="promocionDescripcion" name="descripcion" class="form-control" rows="3" maxlength="255" required></textarea>
+                            </div>
+                            <div class="col-md-5">
+                                <label for="promocionInicio" class="form-label">[[#{promocion.fechaInicio}]]</label>
+                                <input type="date" id="promocionInicio" name="fechaInicio" class="form-control" required/>
+                            </div>
+                            <div class="col-md-5">
+                                <label for="promocionFin" class="form-label">[[#{promocion.fechaFin}]]</label>
+                                <input type="date" id="promocionFin" name="fechaFin" class="form-control" required/>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="promocionActiva" class="form-label">[[#{promocion.activa}]]</label><br/>
+                                <input type="checkbox" id="promocionActiva" name="activa" class="form-check-input"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">[[#{accion.cancelar}]]</button>
+                        <button type="submit" class="btn btn-danger"><i class="fa-solid fa-floppy-disk"></i> [[#{accion.guardar}]]</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

@@ -62,13 +62,13 @@ sql/kamaky.sql
 | HU-004 | Agregar productos al carrito | Roberto | Pendiente |
 | HU-007 | Consultar resumen del carrito | Roberto | Pendiente |
 | HU-008 | Realizar un pedido | Roberto | Pendiente |
-| HU-009 | Solicitar producto personalizado | Luis | Pendiente |
-| HU-010 | Consultar promociones | Luis | Pendiente |
+| HU-009 | Solicitar producto personalizado | Luis | Implementada |
+| HU-010 | Consultar promociones | Luis | Implementada |
 | HU-011 | Consultar información de contacto | Katherine | Pendiente |
 | HU-012 | Consultar información del negocio | Katherine | Pendiente |
 | HU-013 | Agregar productos al catálogo | Minor | Pendiente |
 | HU-015 | Gestionar categorías | Minor | Pendiente |
-| HU-016 | Gestionar promociones | Luis | Pendiente |
+| HU-016 | Gestionar promociones | Luis | Implementada |
 | HU-020 | Gestionar información de contacto | Katherine | Pendiente |
 
 Base del proyecto (estructura, configuración, plantilla, script SQL y entidad Cliente): **completada**.
