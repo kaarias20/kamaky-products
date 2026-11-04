@@ -1,0 +1,115 @@
+<!-- Fragmento #1: head con Bootstrap, iconos y scripts generales -->
+<head th:fragment="head">
+    <title>Kamaky Products</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/webjars/font-awesome/css/all.css}" rel="stylesheet"/>
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/js/general.js}"></script>
+</head>
+
+<!-- Fragmento #2: encabezado con el menú principal (según el prototipo de Figma) -->
+<header th:fragment="encabezado">
+    <nav class="navbar navbar-expand-lg bg-white border-bottom shadow-sm py-3">
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-3 text-danger-emphasis" th:href="@{/}">
+                <i class="fa-solid fa-cake-candles"></i> [[#{app.nombre}]]
+            </a>
+            <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#menuPrincipal">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="menuPrincipal">
+                <ul class="navbar-nav mx-auto gap-lg-3">
+                    <li class="nav-item"><a class="nav-link" th:href="@{/}">[[#{menu.inicio}]]</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/producto/catalogo}">[[#{menu.catalogo}]]</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/promocion/vigentes}">[[#{menu.promociones}]]</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/solicitud/nueva}">[[#{menu.personalizar}]]</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/contacto}">[[#{menu.contacto}]]</a></li>
+                </ul>
+                <ul class="navbar-nav gap-2">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/carrito}" th:title="#{menu.carrito}"><i class="fa-solid fa-cart-shopping fs-5"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin}" th:title="#{menu.admin}"><i class="fa-solid fa-user-gear fs-5"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- Fragmento #3: pie de página -->
+<footer th:fragment="pie" class="bg-danger-subtle text-danger-emphasis pt-4 pb-3 mt-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <h5 class="fw-bold"><i class="fa-solid fa-cake-candles"></i> [[#{app.nombre}]]</h5>
+                <p class="small mb-0">[[#{app.lema}]]</p>
+            </div>
+            <div class="col-md-4">
+                <h6 class="fw-bold">[[#{pie.navegacion}]]</h6>
+                <ul class="list-unstyled small mb-0">
+                    <li><a class="link-danger link-underline-opacity-0" th:href="@{/producto/catalogo}">[[#{menu.catalogo}]]</a></li>
+                    <li><a class="link-danger link-underline-opacity-0" th:href="@{/promocion/vigentes}">[[#{menu.promociones}]]</a></li>
+                    <li><a class="link-danger link-underline-opacity-0" th:href="@{/contacto}">[[#{menu.contacto}]]</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h6 class="fw-bold">[[#{pie.horario}]]</h6>
+                <p class="small mb-0">[[#{pie.horario.detalle}]]</p>
+            </div>
+        </div>
+        <hr/>
+        <p class="small text-center mb-0">[[#{pie.derechos}]]</p>
+    </div>
+</footer>
+
+<!-- Fragmento #4: mensajes del controlador (atributos flash "exito" y "error") -->
+<section th:fragment="mensajes">
+    <div class="toast-container position-fixed top-0 end-0 p-4" style="z-index: 1090;">
+        <div th:if="${exito}" class="toast show border-0 shadow" role="status">
+            <div class="toast-body d-flex align-items-center gap-3 bg-success-subtle rounded">
+                <i class="fa-solid fa-circle-check fs-3 text-success"></i>
+                <div><strong>[[#{mensaje.exito}]]</strong><br/>[[${exito}]]</div>
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+        <div th:if="${error}" class="toast show border-0 shadow" role="alert">
+            <div class="toast-body d-flex align-items-center gap-3 bg-danger-subtle rounded">
+                <i class="fa-solid fa-circle-exclamation fs-3 text-danger"></i>
+                <div><strong>[[#{mensaje.error}]]</strong><br/>[[${error}]]</div>
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Fragmento #5: modal para confirmar eliminación, reutilizable por todos los módulos
+     Uso: th:replace="~{plantilla/fragmentos :: modalEliminar(@{/promocion/eliminar}, 'idPromocion')}"
+     El botón que lo abre debe tener: data-bs-toggle="modal" data-bs-target="#modalEliminar"
+     th:data-id="${...}" th:data-descripcion="${...}" -->
+<section th:fragment="modalEliminar(rutaEliminar, nombreCampoId)">
+    <div class="modal fade" id="modalEliminar" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0">
+                <form method="post" th:action="${rutaEliminar}">
+                    <input type="hidden" id="modalEliminarId" th:name="${nombreCampoId}"/>
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title"><i class="fa-solid fa-trash-can"></i> [[#{eliminar.titulo}]]</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mb-1">[[#{eliminar.pregunta}]] <strong id="modalEliminarDescripcion"></strong>?</p>
+                        <small class="text-muted">[[#{eliminar.aviso}]]</small>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">[[#{accion.cancelar}]]</button>
+                        <button type="submit" class="btn btn-danger">[[#{accion.eliminar}]]</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

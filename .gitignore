@@ -1,0 +1,24 @@
+# Compilados
+target/
+HELP.md
+
+# Llave de Firebase: NUNCA se sube a GitHub
+src/main/resources/firebase/*.json
+
+# NetBeans
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+
+# IntelliJ / VS Code / Eclipse
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
