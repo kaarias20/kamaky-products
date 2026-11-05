@@ -29,10 +29,10 @@
                 </ul>
                 <ul class="navbar-nav gap-2">
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/carrito}" th:title="#{menu.carrito}"><i class="fa-solid fa-cart-shopping fs-5"></i></a>
+                        <a class="nav-link" th:href="@{/carrito}"><i class="fa-solid fa-cart-shopping fs-5"></i></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/admin}" th:title="#{menu.admin}"><i class="fa-solid fa-user-gear fs-5"></i></a>
+                        <a class="nav-link" th:href="@{/admin}"><i class="fa-solid fa-user-gear fs-5"></i></a>
                     </li>
                 </ul>
             </div>
@@ -95,7 +95,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0">
                 <form method="post" th:action="${rutaEliminar}">
-                    <input type="hidden" id="modalEliminarId" th:name="${nombreCampoId}"/>
+                    <input type="hidden" id="modalEliminarId" th:attr="name=${nombreCampoId}"/>
                     <div class="modal-header bg-danger text-white">
                         <h5 class="modal-title"><i class="fa-solid fa-trash-can"></i> [[#{eliminar.titulo}]]</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
