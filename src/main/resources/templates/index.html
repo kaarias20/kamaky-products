@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Página de inicio (base). Persona 2 la completa con los productos destacados y las categorías -->
+<!-- Página de inicio: categorías y productos destacados (HU-001, HU-003) -->
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
     <head th:replace="~{plantilla/fragmentos :: head}"></head>
@@ -12,15 +12,33 @@
                 <h1 class="fw-bold text-danger-emphasis">[[#{inicio.titulo}]]</h1>
                 <p class="lead text-danger-emphasis">[[#{inicio.subtitulo}]]</p>
                 <div class="d-flex justify-content-center gap-3 mt-3">
-                    <a class="btn btn-danger btn-lg rounded-pill px-4" th:href="@{/producto/catalogo}">[[#{inicio.verCatalogo}]]</a>
-                    <a class="btn btn-outline-danger btn-lg rounded-pill px-4" th:href="@{/solicitud/nueva}">[[#{inicio.personalizar}]]</a>
+                    <a class="btn btn-danger btn-lg rounded-pill px-4"
+                       th:href="@{/producto/catalogo}">
+                        [[#{inicio.verCatalogo}]]
+                    </a>
+                    <a class="btn btn-outline-danger btn-lg rounded-pill px-4"
+                       th:href="@{/solicitud/nueva}">
+                        [[#{inicio.personalizar}]]
+                    </a>
                 </div>
             </div>
         </section>
 
-        <section class="container py-5">
-            <!-- Aquí van las categorías y los productos destacados (HU-001, HU-003) -->
+        <section class="container pt-5">
+            <h2 class="h3 fw-bold text-danger-emphasis">
+                [[#{inicio.categorias}]]
+            </h2>
         </section>
+
+        <section th:replace="~{producto/fragmentos :: categoriasCatalogo}"></section>
+
+        <section class="container pt-4">
+            <h2 class="h3 fw-bold text-danger-emphasis">
+                [[#{inicio.destacados}]]
+            </h2>
+        </section>
+
+        <section th:replace="~{producto/fragmentos :: tarjetasCatalogo}"></section>
 
         <footer th:replace="~{plantilla/fragmentos :: pie}"></footer>
     </body>
