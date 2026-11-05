@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{plantilla/fragmentos :: head}"></head>
+    <body class="bg-light">
+        <header th:replace="~{plantilla/fragmentos :: encabezado}"></header>
+        <section th:replace="~{plantilla/fragmentos :: mensajes}"></section>
+
+        <section th:replace="~{producto/fragmentos :: formulario}"></section>
+        <section th:replace="~{producto/fragmentos :: listado}"></section>
+
+        <footer th:replace="~{plantilla/fragmentos :: pie}"></footer>
+    </body>
+</html>

@@ -33,7 +33,43 @@ create table cliente (
 
 
 -- ================== PERSONA 2: categoria, producto ==================
+create table categoria (
+  id_categoria int not null auto_increment,
+  nombre varchar(60) not null,
+  descripcion varchar(255),
+  activa boolean not null default true,
+  primary key (id_categoria),
+  unique key uk_categoria_nombre (nombre)
+) engine = InnoDB;
 
+create table producto (
+  id_producto int not null auto_increment,
+  nombre varchar(100) not null,
+  descripcion varchar(500),
+  precio decimal(10,2) not null,
+  imagen varchar(1024),
+  disponible boolean not null default true,
+  id_categoria int not null,
+  primary key (id_producto),
+  key idx_producto_categoria (id_categoria),
+  constraint fk_producto_categoria
+    foreign key (id_categoria) references categoria (id_categoria)
+    on update cascade
+    on delete restrict
+) engine = InnoDB;
+
+insert into categoria (nombre, descripcion, activa) values
+('Pasteles', 'Pasteles para celebraciones y ocasiones especiales', true),
+('Postres', 'Postres preparados artesanalmente', true),
+('Galletas', 'Galletas y bocadillos dulces', true);
+
+insert into producto
+  (nombre, descripcion, precio, imagen, disponible, id_categoria)
+values
+('Pastel de chocolate', 'Pastel de chocolate para compartir', 13500.00, null, true, 1),
+('Red velvet', 'Pastel red velvet con cubierta cremosa', 15500.00, null, true, 1),
+('Flan casero', 'Flan elaborado artesanalmente', 2800.00, null, true, 2),
+('Galleta con chispas', 'Galleta con chispas de chocolate', 1200.00, null, true, 3);
 
 -- ================== PERSONA 3: pedido, detalle_pedido ==================
 

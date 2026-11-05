@@ -1,0 +1,123 @@
+<!-- Formulario para crear o editar categorías -->
+<section th:fragment="formulario" class="container py-5">
+    <div class="mb-4">
+        <h1 class="fw-bold text-danger-emphasis">[[#{categoria.titulo}]]</h1>
+        <p class="text-muted">[[#{categoria.subtitulo}]]</p>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+            <h2 class="h4 mb-4"
+                th:text="${categoria.idCategoria == null}
+                ? #{categoria.nueva}
+                : 'Editar categoría'">
+                Nueva categoría
+            </h2>
+
+            <form th:action="@{/categoria/guardar}"
+                  th:object="${categoria}"
+                  method="post"
+                  class="row g-3">
+
+                <input type="hidden" th:field="*{idCategoria}"/>
+
+                <div class="col-md-5">
+                    <label for="nombre" class="form-label">
+                        [[#{categoria.nombre}]]
+                    </label>
+                    <input id="nombre" type="text" class="form-control"
+                           th:field="*{nombre}" maxlength="60" required/>
+                    <div class="text-danger small"
+                         th:if="${#fields.hasErrors('nombre')}"
+                         th:errors="*{nombre}"></div>
+                </div>
+
+                <div class="col-md-5">
+                    <label for="descripcion" class="form-label">
+                        [[#{categoria.descripcion}]]
+                    </label>
+                    <input id="descripcion" type="text" class="form-control"
+                           th:field="*{descripcion}" maxlength="255"/>
+                    <div class="text-danger small"
+                         th:if="${#fields.hasErrors('descripcion')}"
+                         th:errors="*{descripcion}"></div>
+                </div>
+
+                <div class="col-md-2 d-flex align-items-end">
+                    <div class="form-check mb-2">
+                        <input id="activa" type="checkbox" class="form-check-input"
+                               th:field="*{activa}"/>
+                        <label for="activa" class="form-check-label">
+                            [[#{categoria.activa}]]
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <button type="submit" class="btn btn-danger">
+                        [[#{accion.guardar}]]
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- Tabla de categorías -->
+<section th:fragment="listado" class="container pb-5">
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+            <h2 class="h4 mb-4">[[#{categoria.lista}]]</h2>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>[[#{categoria.nombre}]]</th>
+                            <th>[[#{categoria.descripcion}]]</th>
+                            <th>[[#{categoria.activa}]]</th>
+                            <th class="text-end">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:if="${#lists.isEmpty(categorias)}">
+                            <td colspan="4" class="text-center text-muted py-4">
+                                [[#{categoria.vacia}]]
+                            </td>
+                        </tr>
+
+                        <tr th:each="item : ${categorias}">
+                            <td th:text="${item.nombre}"></td>
+                            <td th:text="${item.descripcion}"></td>
+                            <td>
+                                <span th:if="${item.activa}"
+                                      class="badge text-bg-success">
+                                    [[#{categoria.estado.activa}]]
+                                </span>
+                                <span th:unless="${item.activa}"
+                                      class="badge text-bg-secondary">
+                                    [[#{categoria.estado.inactiva}]]
+                                </span>
+                            </td>
+                            <td class="text-end">
+                                <a class="btn btn-outline-primary btn-sm"
+                                   th:href="@{/categoria/editar/{id}(id=${item.idCategoria})}">
+                                    Editar
+                                </a>
+
+                                <button type="button"
+                                        class="btn btn-outline-danger btn-sm"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalEliminar"
+                                        th:data-id="${item.idCategoria}"
+                                        th:data-descripcion="${item.nombre}">
+                                    [[#{accion.eliminar}]]
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
