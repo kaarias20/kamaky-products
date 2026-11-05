@@ -1,0 +1,199 @@
+<!-- Formulario para agregar productos -->
+<section th:fragment="formulario" class="container py-5">
+    <div class="mb-4">
+        <h1 class="fw-bold text-danger-emphasis">[[#{producto.agregar}]]</h1>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+            <form th:action="@{/producto/guardar}"
+                  th:object="${producto}"
+                  method="post"
+                  enctype="multipart/form-data"
+                  class="row g-3">
+
+                <div class="col-md-6">
+                    <label for="nombreProducto" class="form-label">
+                        [[#{producto.nombre}]]
+                    </label>
+                    <input id="nombreProducto" type="text" class="form-control"
+                           th:field="*{nombre}" maxlength="100" required/>
+                    <div class="text-danger small"
+                         th:if="${#fields.hasErrors('nombre')}"
+                         th:errors="*{nombre}"></div>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="precio" class="form-label">
+                        [[#{producto.precio}]]
+                    </label>
+                    <input id="precio" type="number" class="form-control"
+                           th:field="*{precio}" min="0.01" step="0.01" required/>
+                    <div class="text-danger small"
+                         th:if="${#fields.hasErrors('precio')}"
+                         th:errors="*{precio}"></div>
+                </div>
+
+                <div class="col-12">
+                    <label for="descripcionProducto" class="form-label">
+                        [[#{producto.descripcion}]]
+                    </label>
+                    <textarea id="descripcionProducto" class="form-control"
+                              th:field="*{descripcion}" rows="3" maxlength="500"></textarea>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="categoriaProducto" class="form-label">
+                        [[#{producto.categoria}]]
+                    </label>
+                    <select id="categoriaProducto" class="form-select"
+                            th:field="*{categoria.idCategoria}" required>
+                        <option value="">[[#{producto.categoria}]]</option>
+                        <option th:each="categoria : ${categorias}"
+                                th:value="${categoria.idCategoria}"
+                                th:text="${categoria.nombre}"></option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="imagenFile" class="form-label">
+                        [[#{producto.imagen}]]
+                    </label>
+                    <input id="imagenFile" type="file" name="imagenFile"
+                           class="form-control" accept="image/*"/>
+                </div>
+
+                <div class="col-12">
+                    <div class="form-check">
+                        <input id="disponible" type="checkbox"
+                               class="form-check-input" th:field="*{disponible}"/>
+                        <label for="disponible" class="form-check-label">
+                            [[#{producto.disponible}]]
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <button type="submit" class="btn btn-danger">
+                        [[#{accion.guardar}]]
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- Lista de productos -->
+<section th:fragment="listado" class="container pb-5">
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+            <h2 class="h4 mb-4">[[#{producto.lista}]]</h2>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>[[#{producto.imagen}]]</th>
+                            <th>[[#{producto.nombre}]]</th>
+                            <th>[[#{producto.precio}]]</th>
+                            <th>[[#{producto.disponible}]]</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:if="${#lists.isEmpty(productos)}">
+                            <td colspan="4" class="text-center text-muted py-4">
+                                [[#{producto.catalogo.vacia}]]
+                            </td>
+                        </tr>
+
+                        <tr th:each="item : ${productos}">
+                            <td>
+                                <img th:if="${item.imagen != null and !#strings.isEmpty(item.imagen)}"
+                                     th:src="${item.imagen}" th:alt="${item.nombre}"
+                                     style="width: 64px; height: 64px; object-fit: cover;"
+                                     class="rounded"/>
+                                <span th:unless="${item.imagen != null and !#strings.isEmpty(item.imagen)}">
+                                    [[#{producto.imagen}]]
+                                </span>
+                            </td>
+                            <td th:text="${item.nombre}"></td>
+                            <td th:text="${#numbers.formatCurrency(item.precio)}"></td>
+                            <td>
+                                <span th:if="${item.disponible}"
+                                      class="badge text-bg-success">
+                                    [[#{producto.disponible.si}]]
+                                </span>
+                                <span th:unless="${item.disponible}"
+                                      class="badge text-bg-secondary">
+                                    [[#{producto.disponible.no}]]
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Pestañas de categorías para el catálogo -->
+<section th:fragment="categoriasCatalogo" class="py-3 mb-4">
+    <ul class="nav nav-underline justify-content-center flex-wrap">
+        <li class="nav-item">
+            <a class="nav-link"
+               th:classappend="${idCategoriaSeleccionada == null} ? 'active'"
+               th:href="@{/producto/catalogo}">
+                [[#{producto.todasCategorias}]]
+            </a>
+        </li>
+
+        <li th:each="categoria : ${categorias}" class="nav-item">
+            <a class="nav-link"
+               th:classappend="${idCategoriaSeleccionada != null and idCategoriaSeleccionada.equals(categoria.idCategoria)} ? 'active'"
+               th:href="@{/producto/catalogo(idCategoria=${categoria.idCategoria})}">
+                [[${categoria.nombre}]]
+            </a>
+        </li>
+    </ul>
+</section>
+
+<section th:fragment="tarjetasCatalogo" class="container py-4">
+    <div th:if="${productos == null or productos.empty}"
+         class="text-center text-muted py-4">
+        [[#{producto.catalogo.vacia}]]
+    </div>
+
+    <div th:unless="${productos == null or productos.empty}"
+         class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
+
+        <div th:each="item : ${productos}" class="col">
+            <article class="card h-100 shadow-sm">
+                <div class="d-flex justify-content-center align-items-center bg-light p-3"
+                     style="height: 220px;">
+                    <img th:if="${item.imagen != null and !#strings.isEmpty(item.imagen)}"
+                         th:src="${item.imagen}" th:alt="${item.nombre}"
+                         class="img-fluid"
+                         style="max-height: 100%; object-fit: contain;"/>
+
+                    <i th:unless="${item.imagen != null and !#strings.isEmpty(item.imagen)}"
+                       class="fa-regular fa-image fa-3x text-danger"></i>
+                </div>
+
+                <div class="card-header bg-white">
+                    <h2 class="h5 card-title text-center text-truncate mb-0"
+                        th:text="${item.nombre}"></h2>
+                </div>
+
+                <div class="card-body">
+                    <p th:if="${item.descripcion != null and !#strings.isEmpty(item.descripcion)}"
+                       class="card-text text-muted mb-0"
+                       th:text="${item.descripcion}"></p>
+                </div>
+
+                <div class="card-footer bg-white text-center">
+                    <span class="text-danger-emphasis fw-bold"
+                          th:text="${#numbers.formatCurrency(item.precio)}"></span>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
